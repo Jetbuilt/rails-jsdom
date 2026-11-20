@@ -290,6 +290,13 @@ test("visible text leaves out hidden elements, templates, comments and closed de
   assert.equal((await runner.snapshot()).text, "OneTwo Three More Open Shown")
 })
 
+test("visible text includes elements a script appends to the root element after the body, but not the head", async () => {
+  await runner.load(`<p>Body text</p>`)
+  await runner.evaluate(`const frame = document.createElement("section"); frame.textContent = "Appended after body"; document.documentElement.append(frame)`)
+
+  assert.equal((await runner.snapshot()).text, "Body text Appended after body")
+})
+
 test("visibility follows hidden ancestors and closed details", async () => {
   await runner.load(`<div hidden><p id="a">A</p></div><details><summary id="s">S</summary><p id="d">D</p></details><p id="v">V</p>`)
   const visible = async id => (await query("css", `#${id}`))[0].visible

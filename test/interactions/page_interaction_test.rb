@@ -262,4 +262,11 @@ class PageInteractionTest < RailsJsdom::TestCase
 
     assert_dom "[data-greeting-target=output]", text: "Please sign in"
   end
+
+  test "text a script appends after the body is part of the page text, as browsers render it" do
+    visit forms_path
+    execute_script "const note = document.createElement('p'); note.textContent = 'Appended after body'; document.documentElement.append(note)"
+
+    assert_text "Appended after body"
+  end
 end

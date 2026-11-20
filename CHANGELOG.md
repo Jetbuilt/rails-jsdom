@@ -19,6 +19,7 @@
 
 ### Fixed
 
+- The page's visible text includes elements a script appends to the root element after `<body>`, which browsers render, such as a fragment Turbo appends when it renders a stream message. Only `<body>` was read before. `<head>` is still left out.
 - Escape cancels the topmost modal `<dialog>`, including one inside a shadow root such as a Web Awesome dialog's: it fires a cancelable `cancel` event and closes the dialog unless that event is prevented, as browsers do. jsdom has no close watcher, so Escape left modals open.
 - A script that navigates with `location.href =`, `location.assign`, `location.replace` or `location.reload` loads the page Rails answers with, as a link would. jsdom reported "Not implemented: navigation to another Document", which failed the action; Turbo uses `location.href` for the full reload it does when a visit's tracked assets change. Fragment and non-HTTP locations stay in the document.
 - `fill_in` and typed keys set a field's value through the browser's own `value` setter, so a page that installs its own setter on the field to track changes, as React does for controlled inputs, sees the change and runs its `onChange`. React ignored values set by `fill_in` before.

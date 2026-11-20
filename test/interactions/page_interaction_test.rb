@@ -131,6 +131,13 @@ class PageInteractionTest < RailsJsdom::TestCase
     assert_dom "#item_1", count: 0
   end
 
+  test "a submit button's formmethod sets the method Rails receives" do
+    visit root_path
+    click_on "Delete now"
+
+    assert_dom "#item_1", count: 0
+  end
+
   test "dismissing a Turbo confirmation keeps the page unchanged" do
     visit root_path
     dismiss_confirm { click "Remove" }

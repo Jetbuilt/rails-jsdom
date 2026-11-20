@@ -320,7 +320,7 @@ CI needs Node and your app's npm packages before the tests run:
 
 See [what you lose](#trade-offs-compared-with-system-tests). In addition:
 
-- jsdom lacks some browser APIs, so the runtime stubs the common ones to keep controllers working: `matchMedia` never matches, `IntersectionObserver` and `ResizeObserver` never report, scrolling does nothing, stylesheets and images fire `load` without being fetched, and the clipboard, Fullscreen API, `DataTransfer` and form-associated custom elements are provided. The page behaves as a desktop browser without touch. A page that needs another missing API needs a small stub in your controller or test.
+- jsdom lacks some browser APIs, so the runtime stubs the common ones to keep controllers working: `matchMedia` never matches, `IntersectionObserver` and `ResizeObserver` never report, scrolling does nothing, stylesheets and images fire `load` without being fetched, and the clipboard, Fullscreen API, `DataTransfer`, a submit button's `formMethod` and form-associated custom elements are provided. The page behaves as a desktop browser without touch. A page that needs another missing API needs a small stub in your controller or test.
 - On a page loaded with `mount_html`, a link or form that leads to a full app page fails. Start such tests from a real page with `visit`.
 - Stimulus outlets are not tested yet.
 

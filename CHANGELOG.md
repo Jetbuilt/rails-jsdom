@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- A submit button's `formMethod` property reflects its `formmethod` attribute, as browsers do. jsdom left it undefined, so turbo-rails sent a `formmethod="delete"` button's form as the form's own method instead.
 - A field named by two labels, such as a visible label and a hidden copy for another layout, is one match for `fill_in` and the other field helpers instead of an ambiguous two.
 
 ## 0.2.1 (2026-11-14)

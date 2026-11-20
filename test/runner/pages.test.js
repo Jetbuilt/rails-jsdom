@@ -152,6 +152,13 @@ test("browser APIs jsdom lacks are stubbed", async () => {
   assert.deepEqual(result, [false, "(min-width: 600px)", false, [], "", "function"])
 })
 
+test("formMethod reflects a submitter's formmethod, limited to the methods a form knows", async () => {
+  await runner.load(`<form method="post"><button id="none">A</button><button id="post" formmethod="POST">B</button><input type="submit" id="delete" formmethod="delete"></form>`)
+  const result = await runner.evaluate(`(() => { const read = () => ["none", "post", "delete"].map(id => document.getElementById(id).formMethod); const before = read(); document.getElementById("none").formMethod = "dialog"; return [before, read()] })()`)
+
+  assert.deepEqual(result, [["", "post", "get"], ["dialog", "post", "get"]])
+})
+
 test("checkVisibility is false for an element that assertions treat as hidden", async () => {
   await runner.load(`<p id="shown">Shown</p><p id="hidden" hidden><span id="inside">Inside</span></p><details><summary id="summary">More</summary><span id="closed">Closed</span></details>`)
   const result = await runner.evaluate(`["shown", "hidden", "inside", "summary", "closed"].map(id => document.getElementById(id).checkVisibility())`)

@@ -51,6 +51,14 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_equal "Beta", submitted.fetch("query")
   end
 
+  test "fill_in finds a field once when two labels name it" do
+    visit forms_path
+    fill_in "Nickname", with: "Grace"
+    click_on "Save preferences"
+
+    assert_equal "Grace", submitted.fetch("nickname")
+  end
+
   test "click_on fails when the only match is hidden" do
     visit forms_path
 

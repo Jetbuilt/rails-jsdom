@@ -21,6 +21,7 @@
   <%= form.label :colours, "Colours" %>
   <%= form.select :colours, [ "Red", "Green", "Blue" ], { selected: [ "Red", "Green" ] }, multiple: true %>
   <%= form.label :nickname, "Nickname" %>
+  <%= form.label :nickname, "Nickname", hidden: true %>
   <%= form.text_field :nickname, value: "Ace" %>
   <%= form.label :locked, "Locked" %>
   <%= form.text_field :locked, value: "fixed", disabled: true %>

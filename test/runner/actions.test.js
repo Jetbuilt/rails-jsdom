@@ -97,6 +97,13 @@ test("an action fails when every match is hidden, except on a file field", async
   assert.equal(await act("attach", "upload", { files: [] }), null)
 })
 
+test("fill_in counts a field once when two labels name it", async () => {
+  await runner.load(`<label for="vendor">Search for Vendor</label><label for="vendor" hidden>Search for Vendor</label><input id="vendor">`)
+  await act("fill_in", "Search for Vendor", { with: "Space X" })
+
+  assert.equal(await runner.evaluate(`document.getElementById("vendor").value`), "Space X")
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

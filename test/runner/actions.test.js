@@ -120,6 +120,21 @@ test("a label's for names every field with that id, skipping a hidden input that
   assert.deepEqual(await runner.evaluate(`[document.querySelector("[name=cost]").value, document.querySelector("[name=mirror]").value, document.querySelector("[name=nested]").value]`), ["100", "", "inside"])
 })
 
+test("fill_in and typing set a value past a value setter the page installs on the field, as React does to track changes", async () => {
+  await runner.load(`<input id="r"><textarea id="t"></textarea>`)
+  await runner.evaluate(`for (const field of [document.getElementById("r"), document.getElementById("t")]) {
+    const native = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(field), "value")
+    let tracked = ""
+    Object.defineProperty(field, "value", { configurable: true, get() { return native.get.call(this) }, set(value) { tracked = value; native.set.call(this, value) } })
+    field.addEventListener("input", () => { field.dataset.changed = String(field.value !== tracked) })
+  }`)
+  await act("fill_in", "#r", { with: "15" })
+  await runner.evaluate(`document.getElementById("t").focus()`)
+  await runner.run({ command: "send_keys", keys: [{ text: "a" }] })
+
+  assert.deepEqual(await runner.evaluate(`[document.getElementById("r").dataset.changed, document.getElementById("t").dataset.changed]`), ["true", "true"])
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

@@ -19,6 +19,7 @@
 
 ### Fixed
 
+- `fill_in` and typed keys set a field's value through the browser's own `value` setter, so a page that installs its own setter on the field to track changes, as React does for controlled inputs, sees the change and runs its `onChange`. React ignored values set by `fill_in` before.
 - `contentEditable` reflects the `contenteditable` attribute (`"true"`, `"false"`, `"plaintext-only"` or `"inherit"`), and setting it makes an element editable or not. jsdom left it undefined, so libraries that check it before binding to an editor, such as Tribute on a Trix editor, threw.
 - A label's `for` names every field with that id, as in Capybara, so a field still matches its label when a hidden input earlier in the page shares the id, as Rails form builders sometimes render. jsdom's `label.control` resolved to the hidden input, which is not labelable, so the field was not found.
 - Inline event handler attributes such as `onchange` keep working on elements adopted from a parsed document, which is how Turbo renders the pages it visits. jsdom dropped them, so after the first Turbo visit an inline handler never ran.

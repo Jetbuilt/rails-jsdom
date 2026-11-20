@@ -28,6 +28,7 @@ end
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Apps that bundle JavaScript (esbuild, Bun, Vite, webpack)](#apps-that-bundle-javascript-esbuild-bun-vite-webpack)
+- [Hiding by class](#hiding-by-class)
 - [Writing tests](#writing-tests)
 - [API](#api)
 - [Action Cable and Turbo Stream broadcasts](#action-cable-and-turbo-stream-broadcasts)
@@ -171,6 +172,16 @@ export default options => ({
   plugins: [vite, ...options.plugins]
 })
 ```
+
+## Hiding by class
+
+Assertions and finders skip what the page hides with the `hidden` attribute, an inline `display: none`, a closed `<dialog>` or `<details>`, and elements such as `<template>`. rails-jsdom does not apply stylesheets, so an element that the app's CSS hides, such as one with a `.hide` utility class, counts as visible. Name those selectors in `test/test_helper.rb` after `require "rails_jsdom"`:
+
+```ruby
+RailsJsdom.hidden_selectors = [ ".hide", "wa-dialog:not([open])" ]
+```
+
+An element matching one of them is hidden, with everything inside it. Only list selectors that always hide what they match.
 
 ## Writing tests
 

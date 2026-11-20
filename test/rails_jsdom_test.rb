@@ -22,9 +22,17 @@ class RailsJsdomTest < ActiveSupport::TestCase
   end
 
   test ".setup points Node at the application and its Stimulus controllers" do
-    expected = { command: "setup", root: Rails.root.to_s, controllers: Rails.root.join("app/javascript/controllers").to_s, horizon: RailsJsdom::TIMER_HORIZON, hidden: RailsJsdom::HIDDEN_SELECTOR }
+    expected = { command: "setup", root: Rails.root.to_s, controllers: Rails.root.join("app/javascript/controllers").to_s, horizon: RailsJsdom::TIMER_HORIZON, hidden: "#{RailsJsdom::HIDDEN_SELECTOR}, .is-hidden" }
 
     assert_equal expected, RailsJsdom.setup.slice(*expected.keys)
+  end
+
+  test ".hidden_selectors is empty unless the app names some" do
+    RailsJsdom.hidden_selectors = nil
+
+    assert_equal [ [], RailsJsdom::HIDDEN_SELECTOR ], [ RailsJsdom.hidden_selectors, RailsJsdom.setup.fetch(:hidden) ]
+  ensure
+    RailsJsdom.hidden_selectors = [ ".is-hidden" ]
   end
 
   test ".setup leaves the entry and esbuild config to the importmap by default" do

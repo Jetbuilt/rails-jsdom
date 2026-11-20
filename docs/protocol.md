@@ -112,7 +112,7 @@ An action fails if the page threw an error, rejected a promise, showed an unexpe
 | `stubs` | The pin names that resolve to other hosts. They are bundled as empty modules. |
 | `directories` | The importmap `pin_all_from` directories, as `{ prefix: path }` |
 | `horizon` | How far ahead, in milliseconds, settling runs timers |
-| `hidden` | The CSS selector for elements whose text is not visible |
+| `hidden` | The CSS selector for elements whose text is not visible, including the app's `RailsJsdom.hidden_selectors` |
 
 ## Time
 

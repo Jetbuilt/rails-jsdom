@@ -93,6 +93,15 @@ class BrowserInteractionTest < RailsJsdom::TestCase
     assert_equal [ true, false ], evaluate_script("['shown', 'hidden'].map(id => document.getElementById(id).checkVisibility())")
   end
 
+  test "an element matching one of the app's hidden selectors is hidden, with its descendants" do
+    mount_html "<p class='is-hidden'>Gone <span id='inside'>Inside</span></p><p>Shown</p>"
+
+    assert_text "Shown"
+    assert_no_text "Gone"
+    assert_no_selector "#inside"
+    assert_selector "#inside", visible: :hidden
+  end
+
   test "click_on finds a button by its name" do
     add_to_page "<div id='probe'><form action='/echo'><button name='commit' value='stored'>Store</button></form></div>"
     within("#probe") { click_on "commit" }

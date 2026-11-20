@@ -8,6 +8,7 @@
 - `RailsJsdom.register_controllers = false` leaves Stimulus controller registration to the app's own JavaScript, so a controller its entry registers does not connect twice. Errors from every Stimulus application on the page still fail the action.
 - `RailsJsdom.esbuild_config` names a module of the app that receives the esbuild build options and returns them, for plugins, loaders and defines that bundler-specific syntax needs.
 - An app without importmap configured gets no pins instead of an error.
+- `RailsJsdom.hidden_selectors` names selectors the app's stylesheets always hide, such as a `.hide` utility class. Assertions, finders and visible text treat matching elements, and their descendants, as hidden.
 
 ## 0.2.1 (2026-11-14)
 

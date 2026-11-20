@@ -30,7 +30,11 @@ module RailsJsdom
   class << self
     attr_writer :command_timeout
     attr_accessor :entry, :esbuild_config
-    attr_writer :register_controllers
+    attr_writer :register_controllers, :hidden_selectors
+
+    def hidden_selectors
+      @hidden_selectors || []
+    end
 
     def register_controllers?
       @register_controllers != false
@@ -58,7 +62,7 @@ module RailsJsdom
         stubs: remote_modules,
         directories: directories,
         horizon: TIMER_HORIZON,
-        hidden: HIDDEN_SELECTOR
+        hidden: [ HIDDEN_SELECTOR, *hidden_selectors ].join(", ")
       }
     end
 

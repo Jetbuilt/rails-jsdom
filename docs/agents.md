@@ -36,6 +36,14 @@ RailsJsdom.esbuild_config = "test/rails_jsdom.esbuild.mjs"
 - rails-jsdom bundles the entry with esbuild. If the build fails on syntax only the app's bundler understands (`import.meta.glob`, `?raw` or `?url` imports, `require.context`, JSX in `.js` files, aliases, `define`d globals), add `esbuild_config`: a module whose default export takes the esbuild options and returns them with the plugins, loaders and defines needed. Put new plugins before `options.plugins`. The README has a Vite example.
 - A page that throws because jsdom lacks a browser API the app's libraries call (for example the Web Animations API) needs a stub; add it as an esbuild `banner` in the same config.
 
+### Apps that hide elements with CSS classes
+
+rails-jsdom does not apply stylesheets. If the app hides elements with a class or another selector whose CSS always means `display: none` or `visibility: hidden` (a `.hide` utility class, a closed custom-element dialog), list them in `test/test_helper.rb` so assertions treat them as hidden:
+
+```ruby
+RailsJsdom.hidden_selectors = [ ".hide", "wa-dialog:not([open])" ]
+```
+
 ## Write an interaction test
 
 ```ruby

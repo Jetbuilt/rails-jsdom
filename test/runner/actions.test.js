@@ -81,6 +81,14 @@ test("match first picks the first of several matches", async () => {
   assert.equal(await read("hit"), 1)
 })
 
+test("an action prefers the one visible, enabled match over hidden or disabled ones", async () => {
+  await runner.load(`<input name="query" disabled><input name="query" id="live"><button hidden onclick="window.hit = 1">Go</button><button onclick="window.hit = 2">Go</button>`)
+  await act("fill_in", "query", { with: "Beta" })
+  await act("click", "Go")
+
+  assert.deepEqual(await runner.evaluate(`[document.getElementById("live").value, window.hit]`), ["Beta", 2])
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

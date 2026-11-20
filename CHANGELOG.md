@@ -10,6 +10,10 @@
 - An app without importmap configured gets no pins instead of an error.
 - `RailsJsdom.hidden_selectors` names selectors the app's stylesheets always hide, such as a `.hide` utility class. Assertions, finders and visible text treat matching elements, and their descendants, as hidden.
 
+### Changed
+
+- An action whose locator matches several elements acts on the one that is visible and enabled, as Capybara does, instead of failing as ambiguous. A disabled search box beside the live one, or a hidden copy of a button, no longer gets in the way. When no match is visible and enabled, the action behaves as before: a hidden file field is still attached to, and a disabled button still fails with "is disabled".
+
 ## 0.2.1 (2026-11-14)
 
 ### Fixed

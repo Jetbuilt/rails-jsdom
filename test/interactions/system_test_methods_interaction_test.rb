@@ -43,6 +43,14 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_raises(RailsJsdom::Error) { fill_in "Remember me", with: "yes" }
   end
 
+  test "fill_in and click_on act on the one visible, enabled match when others are disabled or hidden" do
+    visit forms_path
+    fill_in "query", with: "Beta"
+    click_on "Save preferences"
+
+    assert_equal "Beta", submitted.fetch("query")
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

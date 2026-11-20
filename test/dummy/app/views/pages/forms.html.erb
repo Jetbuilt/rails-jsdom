@@ -26,6 +26,9 @@
   <%= form.text_field :locked, value: "fixed", disabled: true %>
   <%= form.label :bio, "Bio" %>
   <%= form.text_area :bio %>
+  <%= form.text_field :query, disabled: true, placeholder: "Search orders" %>
+  <%= form.text_field :query, id: "source_query" %>
+  <section hidden><button type="button">Save preferences</button></section>
   <%= form.submit "Save preferences" %>
   <%= form.button "Archive", type: "button", disabled: true %>
 <% end %>

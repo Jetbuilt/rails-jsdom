@@ -159,6 +159,18 @@ test("formMethod reflects a submitter's formmethod, limited to the methods a for
   assert.deepEqual(result, [["", "post", "get"], ["dialog", "post", "get"]])
 })
 
+test("an element adopted from a parsed document keeps its inline event handlers, as in browsers", async () => {
+  await runner.load(`<main></main>`)
+  const result = await runner.evaluate(`(() => {
+    const parsed = new DOMParser().parseFromString('<p><button onclick="window.hit = (window.hit || 0) + 1">Go</button></p>', "text/html")
+    document.querySelector("main").append(document.adoptNode(parsed.querySelector("p")), document.adoptNode(parsed.createTextNode("text")), document.adoptNode(parsed.createDocumentFragment()))
+    document.querySelector("button").click()
+    return window.hit
+  })()`)
+
+  assert.equal(result, 1)
+})
+
 test("checkVisibility is false for an element that assertions treat as hidden", async () => {
   await runner.load(`<p id="shown">Shown</p><p id="hidden" hidden><span id="inside">Inside</span></p><details><summary id="summary">More</summary><span id="closed">Closed</span></details>`)
   const result = await runner.evaluate(`["shown", "hidden", "inside", "summary", "closed"].map(id => document.getElementById(id).checkVisibility())`)

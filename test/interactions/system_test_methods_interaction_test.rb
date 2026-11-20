@@ -80,6 +80,14 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_selector "#referer", text: "http://www.example.com/forms"
   end
 
+  test "an inline change handler on a page Turbo rendered still runs" do
+    visit forms_path
+    click_on "Save preferences"
+    select "Newest", from: "Sort"
+
+    assert_current_path "/echo?sort=Newest"
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

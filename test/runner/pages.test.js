@@ -474,6 +474,27 @@ test("links that stay on the page, open elsewhere, download or are prevented do 
   assert.equal(runner.requests.length, 0)
 })
 
+test("assigning, replacing and reloading location load the page Rails answers with", async () => {
+  await runner.load(`<p>Start</p>`, `${HOST}/start`)
+  runner.routes[`GET ${HOST}/next`] = html(`${HOST}/next`, "<p>Next page</p>", "Next")
+  runner.routes[`GET ${HOST}/other`] = html(`${HOST}/other`, "<p>Other page</p>", "Other")
+  await runner.evaluate(`window.location.href = "/next"`)
+  const assigned = (await runner.snapshot()).text
+  await runner.evaluate(`window.location.replace("/other")`)
+  const replaced = (await runner.snapshot()).text
+  await runner.evaluate(`window.location.reload()`)
+
+  assert.deepEqual([assigned, replaced, (await runner.snapshot()).url], ["Next page", "Other page", `${HOST}/other`])
+  assert.deepEqual(runner.requests.map(request => request.url), [`${HOST}/next`, `${HOST}/other`, `${HOST}/other`])
+})
+
+test("assigning a fragment or a non-http location stays in the document", async () => {
+  await runner.load(`<p id="top">Start</p>`, `${HOST}/start`)
+  await runner.evaluate(`window.location.hash = "top"; window.location.href = "javascript:void(0)"`)
+
+  assert.deepEqual([runner.requests.length, (await runner.snapshot()).url], [0, `${HOST}/start#top`])
+})
+
 test("a link to the same path with another query navigates", async () => {
   await runner.load(`<a href="/?page=2#top">Page 2</a>`)
   await runner.evaluate(`document.querySelector("a").click()`)

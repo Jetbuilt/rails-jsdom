@@ -104,6 +104,14 @@ test("fill_in counts a field once when two labels name it", async () => {
   assert.equal(await runner.evaluate(`document.getElementById("vendor").value`), "Space X")
 })
 
+test("within picks the one visible match over hidden ones, and still scopes to a hidden element alone", async () => {
+  await runner.load(`<ul class="results" hidden><li><button>Pick</button></li></ul><ul class="results"><li><button onclick="window.hit = true">Pick</button></li></ul><div id="closed" hidden><p>Gone</p></div>`)
+  await act("click", "Pick", { scope: [{ css: ".results" }] })
+
+  assert.equal(await read("hit"), true)
+  assert.equal((await query("css", "p", [{ css: "#closed" }])).length, 1)
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

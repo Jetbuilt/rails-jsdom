@@ -14,6 +14,7 @@
 
 - An action whose locator matches several elements acts on the one that is visible and enabled, as Capybara does, instead of failing as ambiguous. A disabled search box beside the live one, or a hidden copy of a button, no longer gets in the way. When no match is visible and enabled, the action behaves as before: a hidden file field is still attached to, and a disabled button still fails with "is disabled".
 - An action whose every match is hidden fails with "unable to find … every match is hidden", as a click on something the user cannot see fails in a browser. A hidden file field is the exception: `attach_file` still attaches to it.
+- `within` scopes to the one visible match when hidden elements share its selector, as Capybara does, instead of failing as ambiguous. A selector that matches only hidden elements still scopes to the one it matches.
 
 ### Fixed
 

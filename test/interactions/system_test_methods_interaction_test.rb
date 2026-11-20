@@ -59,6 +59,13 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_equal "Grace", submitted.fetch("nickname")
   end
 
+  test "within scopes to the one visible match when hidden ones share its selector" do
+    visit forms_path
+    within(".suggestions") { click_on "Suggested" }
+
+    assert_button "Picked"
+  end
+
   test "click_on fails when the only match is hidden" do
     visit forms_path
 

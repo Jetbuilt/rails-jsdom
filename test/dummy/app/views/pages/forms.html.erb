@@ -34,6 +34,9 @@
   <%= form.button "Archive", type: "button", disabled: true %>
 <% end %>
 
+<ul class="suggestions" hidden><li>Old suggestion</li></ul>
+<ul class="suggestions"><li><button type="button" onclick="this.textContent = 'Picked'">Suggested</button></li></ul>
+
 <table id="prices">
   <caption>Prices</caption>
   <tr><td>Mug</td><td><button type="button" onclick="this.textContent = 'Chosen'">Choose</button></td></tr>

@@ -33,6 +33,16 @@ class KeyInteractionTest < RailsJsdom::TestCase
     assert_current_path "/echo?email=ada%40example.com&commit=signup"
   end
 
+  test "escape closes the modal dialog the focus is in" do
+    click_on "Open sheet"
+
+    assert_text "Sheet body"
+
+    find_field("Sheet field").send_keys(:escape)
+
+    assert_no_text "Sheet body"
+  end
+
   test "enter in a textarea adds a new line" do
     find_field("Notes").send_keys("one", :enter, "two")
 

@@ -70,6 +70,30 @@ test("keys do not edit a disabled or read-only field", async () => {
   assert.equal(await read("r.value"), "r")
 })
 
+test("escape cancels the topmost modal dialog, including one in a shadow root, unless its cancel event is prevented", async () => {
+  await runner.load(`<dialog id="outer"><input id="field"></dialog><dialog id="plain"></dialog><div id="host"></div>`)
+  await runner.evaluate(`
+    const outer = document.getElementById("outer")
+    const inner = document.getElementById("host").attachShadow({ mode: "open" }).appendChild(document.createElement("dialog"))
+    window.events = []
+    for (const [name, dialog] of [["outer", outer], ["inner", inner]]) {
+      dialog.addEventListener("cancel", () => window.events.push(name + " cancel"))
+      dialog.addEventListener("close", () => window.events.push(name + " close"))
+    }
+    outer.showModal()
+    inner.showModal()
+    document.getElementById("plain").show()
+    window.inner = inner
+  `)
+  await type([key("escape")], "#field")
+  await runner.evaluate(`document.getElementById("outer").addEventListener("cancel", event => event.preventDefault())`)
+  await type([key("escape")], "#field")
+  await runner.evaluate(`document.getElementById("outer").remove()`)
+  await type([key("escape")])
+
+  assert.deepEqual(await runner.evaluate(`[window.events, window.inner.open, document.getElementById("plain").open]`), [["inner cancel", "inner close", "outer cancel"], false, true])
+})
+
 test("enter in a textarea adds a new line", async () => {
   await runner.load(`<textarea id="t">a</textarea>`)
   await type([key("enter"), text("b")], "#t")

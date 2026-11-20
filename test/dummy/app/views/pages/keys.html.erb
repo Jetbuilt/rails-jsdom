@@ -1,6 +1,8 @@
 <% content_for :title, "Keys" %>
 <h1>Keys</h1>
 <button type="button" onclick="window.location.assign('/second')">Go by script</button>
+<button type="button" onclick="document.getElementById('sheet').showModal()">Open sheet</button>
+<dialog id="sheet"><p>Sheet body</p><input aria-label="Sheet field"></dialog>
 
 <form action="/echo" method="get">
   <label for="query">Query</label>

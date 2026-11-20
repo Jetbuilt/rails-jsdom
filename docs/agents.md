@@ -76,6 +76,7 @@ end
 - Requests to other hosts fail like a network error. Answer them with `stub_fetch` after the page loads.
 - Broadcasts made with `broadcast_*_later` arrive when the test performs the jobs, for example `perform_enqueued_jobs { click_on "Post" }`.
 - `using_session(:name) { ... }` runs a block as another user with their own cookies and page.
+- `header "User-Agent", "..."` sends a header with every later request, for tests that system tests ran with a phone's user agent or a header set through `page.driver`.
 
 ## Convert a system test suite
 

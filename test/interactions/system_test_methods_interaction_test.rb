@@ -96,6 +96,18 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_equal [ "250", "0" ], submitted.values_at("budget", "budget_mirror")
   end
 
+  test "header sends a header with visits and with the requests pages make" do
+    header "User-Agent", "Phone"
+    visit echo_path
+
+    assert_selector "#user-agent", text: "Phone"
+
+    visit forms_path
+    click_on "Save preferences"
+
+    assert_selector "#user-agent", text: "Phone"
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

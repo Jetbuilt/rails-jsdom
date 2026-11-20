@@ -268,6 +268,7 @@ The full API reference is at **[jakehow.github.io/rails-jsdom](https://jakehow.g
 | [`stub_fetch`](https://jakehow.github.io/rails-jsdom/RailsJsdom/TestHelper.html#method-i-stub_fetch) | Answers a page request without Rails |
 | [`stub_layout`](https://jakehow.github.io/rails-jsdom/RailsJsdom/TestHelper.html#method-i-stub_layout) | Gives elements matching a selector, and ranges inside them, a box instead of 0x0, for a test whose page waits for a real measurement |
 | [`page_text`](https://jakehow.github.io/rails-jsdom/RailsJsdom/TestHelper.html#method-i-page_text) | The visible text of the page or the current `within` scope |
+| [`header`](https://jakehow.github.io/rails-jsdom/RailsJsdom/TestHelper.html#method-i-header) | Sends a header, such as a phone's `User-Agent`, with every request Rails receives from then on: visits and the requests pages make. A request that sets the header itself keeps its own value. Like rack_test's `page.driver.header` |
 
 `assert_dom`, `assert_select` and `css_select` work as in any Rails test and read the live page.
 

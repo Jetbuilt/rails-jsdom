@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- `contentEditable` reflects the `contenteditable` attribute (`"true"`, `"false"`, `"plaintext-only"` or `"inherit"`), and setting it makes an element editable or not. jsdom left it undefined, so libraries that check it before binding to an editor, such as Tribute on a Trix editor, threw.
 - A label's `for` names every field with that id, as in Capybara, so a field still matches its label when a hidden input earlier in the page shares the id, as Rails form builders sometimes render. jsdom's `label.control` resolved to the hidden input, which is not labelable, so the field was not found.
 - Inline event handler attributes such as `onchange` keep working on elements adopted from a parsed document, which is how Turbo renders the pages it visits. jsdom dropped them, so after the first Turbo visit an inline handler never ran.
 - Enter in a field submits through the first submit button its form owns. A button inside the form that belongs to another form through its `form` attribute is skipped, as browsers do, instead of being clicked.

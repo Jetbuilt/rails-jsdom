@@ -171,6 +171,19 @@ test("an element adopted from a parsed document keeps its inline event handlers,
   assert.equal(result, 1)
 })
 
+test("contentEditable reflects the contenteditable attribute, and setting it to true makes an element editable", async () => {
+  await runner.load(`<div id="on" contenteditable></div><div id="off" contenteditable="false"></div><div id="plain" contenteditable="plaintext-only"></div><div id="none"></div><div id="odd" contenteditable="maybe"></div>`)
+  const result = await runner.evaluate(`(() => {
+    const read = () => ["on", "off", "plain", "none", "odd"].map(id => document.getElementById(id).contentEditable)
+    const before = read()
+    document.getElementById("none").contentEditable = true
+    document.getElementById("on").contentEditable = "inherit"
+    return [before, read(), document.getElementById("none").isContentEditable]
+  })()`)
+
+  assert.deepEqual(result, [["true", "false", "plaintext-only", "inherit", "inherit"], ["inherit", "false", "plaintext-only", "true", "inherit"], true])
+})
+
 test("checkVisibility is false for an element that assertions treat as hidden", async () => {
   await runner.load(`<p id="shown">Shown</p><p id="hidden" hidden><span id="inside">Inside</span></p><details><summary id="summary">More</summary><span id="closed">Closed</span></details>`)
   const result = await runner.evaluate(`["shown", "hidden", "inside", "summary", "closed"].map(id => document.getElementById(id).checkVisibility())`)
@@ -300,6 +313,8 @@ test("jsdom still lacks the browser APIs the runtime adds", () => {
     setFormValue: window.ElementInternals.prototype.setFormValue,
     requestFullscreen: window.Element.prototype.requestFullscreen, exitFullscreen: window.document.exitFullscreen,
     isContentEditable: Object.getOwnPropertyDescriptor(window.HTMLElement.prototype, "isContentEditable"),
+    contentEditable: Object.getOwnPropertyDescriptor(window.HTMLElement.prototype, "contentEditable"),
+    formMethod: Object.getOwnPropertyDescriptor(window.HTMLButtonElement.prototype, "formMethod"),
     Request: window.Request, Response: window.Response
   }
 

@@ -102,6 +102,12 @@ class BrowserInteractionTest < RailsJsdom::TestCase
     assert_selector "#inside", visible: :hidden
   end
 
+  test "contentEditable reports an editable region, as libraries that bind to editors check" do
+    visit forms_path
+
+    assert_equal "true", find("#editor").evaluate_script("this.contentEditable")
+  end
+
   test "click_on finds a button by its name" do
     add_to_page "<div id='probe'><form action='/echo'><button name='commit' value='stored'>Store</button></form></div>"
     within("#probe") { click_on "commit" }

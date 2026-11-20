@@ -73,6 +73,13 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_match(/unable to find "Discard draft": every match is hidden/, error.message)
   end
 
+  test "a form submitted from a page tells Rails which page it came from" do
+    visit forms_path
+    click_on "Save preferences"
+
+    assert_selector "#referer", text: "http://www.example.com/forms"
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

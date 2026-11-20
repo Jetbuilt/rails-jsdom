@@ -349,7 +349,15 @@ test("fetch asks Rails with the method, headers and a URL relative to the page",
   const result = await runner.evaluate(`fetch("new", { method: "post", headers: { "X-Token": "t" }, body: "raw" }).then(async r => [r.status, r.headers.get("x-id"), await r.text(), r.url, r.redirected])`)
 
   assert.deepEqual(result, [201, "7", "made", `${HOST}/items/new`, true])
-  assert.deepEqual(runner.requests[0], { method: "POST", url: `${HOST}/items/new`, headers: { "x-token": "t" }, body: Buffer.from("raw").toString("base64") })
+  assert.deepEqual(runner.requests[0], { method: "POST", url: `${HOST}/items/new`, headers: { "x-token": "t", referer: `${HOST}/items/` }, body: Buffer.from("raw").toString("base64") })
+})
+
+test("a page request sends the page's URL without its fragment as Referer, unless it sets one or leaves the origin", async () => {
+  await runner.load("<p>Page</p>", `${HOST}/items/?page=2#top`)
+  runner.routes[`GET ${HOST}/a`] = { status: 200, headers: {}, body: "a", url: `${HOST}/a`, redirected: false }
+  await runner.evaluate(`fetch("/a").then(() => fetch("/a", { headers: { Referer: "${HOST}/elsewhere" } })).then(() => fetch("https://other.test/b").catch(() => null))`)
+
+  assert.deepEqual(runner.requests.map(request => request.headers.referer), [`${HOST}/items/?page=2`, `${HOST}/elsewhere`, undefined])
 })
 
 test("fetch takes a Request and defaults to GET", async () => {

@@ -12,6 +12,14 @@
   <input id="only" name="only">
 </form>
 
+<form action="/echo" method="get" id="coupon_check"></form>
+<form action="/echo" method="get">
+  <label for="signup_email">Signup email</label>
+  <input id="signup_email" name="email">
+  <button form="coupon_check" name="coupon" value="check">Apply</button>
+  <button name="commit" value="signup">Sign up</button>
+</form>
+
 <label for="notes">Notes</label>
 <textarea id="notes"></textarea>
 

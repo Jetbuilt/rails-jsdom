@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- Enter in a field submits through the first submit button its form owns. A button inside the form that belongs to another form through its `form` attribute is skipped, as browsers do, instead of being clicked.
 - Requests a page makes to its own origin (fetch, XMLHttpRequest, form submissions, Turbo visits) send the page's URL, without its fragment, as `Referer`, as browsers do. `redirect_back` and `request.referer` saw nothing before. A request that sets its own `Referer` keeps it.
 - A submit button's `formMethod` property reflects its `formmethod` attribute, as browsers do. jsdom left it undefined, so turbo-rails sent a `formmethod="delete"` button's form as the form's own method instead.
 - A field named by two labels, such as a visible label and a hidden copy for another layout, is one match for `fill_in` and the other field helpers instead of an ambiguous two.

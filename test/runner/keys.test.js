@@ -92,6 +92,13 @@ test("enter in a field submits its form through the first submit button", async 
   assert.equal(runner.requests[0].url, `${HOST}/a?q=x&via=go`)
 })
 
+test("enter in a field submits through its form's first submit button, skipping buttons that belong to another form", async () => {
+  await runner.load(`<form id="other" action="/other"></form><form action="/a"><input id="q" name="q" value="x"><button form="other">Apply</button><button name="via" value="go">Go</button></form><button form="other">Outside</button>`)
+  await type([key("enter")], "#q")
+
+  assert.equal(runner.requests[0].url, `${HOST}/a?q=x&via=go`)
+})
+
 test("enter in a field of a form without a submit button submits the form", async () => {
   await runner.load(`<form action="/b"><input id="q" name="q" value="y"></form>`)
   await type([key("enter")], "#q")

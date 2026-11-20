@@ -27,6 +27,12 @@ class KeyInteractionTest < RailsJsdom::TestCase
     assert_current_path "/echo?only=plates"
   end
 
+  test "enter in a field skips a submit button that belongs to another form" do
+    find_field("Signup email").send_keys("ada@example.com", :enter)
+
+    assert_current_path "/echo?email=ada%40example.com&commit=signup"
+  end
+
   test "enter in a textarea adds a new line" do
     find_field("Notes").send_keys("one", :enter, "two")
 

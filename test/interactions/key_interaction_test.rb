@@ -43,6 +43,13 @@ class KeyInteractionTest < RailsJsdom::TestCase
     assert_no_text "Sheet body"
   end
 
+  test "a modal dialog closed with escape has an empty return value" do
+    click_on "Open sheet"
+    find_field("Sheet field").send_keys(:escape)
+
+    assert_equal "", evaluate_script("document.getElementById('sheet').returnValue")
+  end
+
   test "enter in a textarea adds a new line" do
     find_field("Notes").send_keys("one", :enter, "two")
 

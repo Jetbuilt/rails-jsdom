@@ -69,6 +69,19 @@ test("a dialog of another type than expected is unexpected", async () => {
   await assert.rejects(runner.evaluate("alert('Hi')"), /unexpected alert dialog/)
 })
 
+test("a dialog's returnValue starts empty and keeps the value it was closed with, as a string", async () => {
+  await runner.load(`<dialog id="d"></dialog>`)
+  const result = await runner.evaluate(`
+    const dialog = document.getElementById("d")
+    const before = dialog.returnValue
+    dialog.showModal()
+    dialog.close(7)
+    ;[before, dialog.returnValue]
+  `)
+
+  assert.deepEqual(result, ["", "7"])
+})
+
 test("dialog elements open and close, firing close only when they were open", async () => {
   await runner.load(`<dialog id="d"></dialog>`)
   const result = await runner.evaluate(`

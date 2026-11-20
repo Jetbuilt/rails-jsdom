@@ -99,7 +99,7 @@ Work through `test/system/` one file at a time.
    - an unexpected dialog: wrap the action in the matching `accept_*` or `dismiss_*`;
    - a request to another host: stub it with `stub_fetch`;
    - a missing browser API: stub it in the test with `execute_script`;
-   - an element found more than once: scope it with `within` or pass `match: :first`. Actions already skip disabled and hidden matches when one visible, enabled match remains.
+   - an element found more than once: scope it with `within` or pass `match: :first`. Actions already skip disabled and hidden matches when one visible, enabled match remains. An action whose every match is hidden fails, except `attach_file` on a hidden file field.
 7. **When `test/system/` is empty,** remove `ApplicationSystemTestCase`, the `capybara` and `selenium-webdriver` gems, and the CI steps that installed a browser.
 
 Interaction tests are faster than system tests, so do not merge tests to save time. Keep one behaviour per test. Group checks of the same result into one test only when they would otherwise repeat the same steps.

@@ -89,6 +89,14 @@ test("an action prefers the one visible, enabled match over hidden or disabled o
   assert.deepEqual(await runner.evaluate(`[document.getElementById("live").value, window.hit]`), ["Beta", 2])
 })
 
+test("an action fails when every match is hidden, except on a file field", async () => {
+  await runner.load(`<div hidden><button>Gone</button><input name="note"></div><input type="file" name="upload" hidden>`)
+
+  await assert.rejects(act("click", "Gone"), /unable to find "Gone": every match is hidden/)
+  await assert.rejects(act("fill_in", "note", { with: "x" }), /unable to find "note": every match is hidden/)
+  assert.equal(await act("attach", "upload", { files: [] }), null)
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

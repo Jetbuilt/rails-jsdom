@@ -51,6 +51,13 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_equal "Beta", submitted.fetch("query")
   end
 
+  test "click_on fails when the only match is hidden" do
+    visit forms_path
+
+    error = assert_raises(RailsJsdom::Error) { click_on "Discard draft" }
+    assert_match(/unable to find "Discard draft": every match is hidden/, error.message)
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

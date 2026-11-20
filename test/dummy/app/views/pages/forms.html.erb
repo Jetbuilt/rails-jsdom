@@ -28,7 +28,7 @@
   <%= form.text_area :bio %>
   <%= form.text_field :query, disabled: true, placeholder: "Search orders" %>
   <%= form.text_field :query, id: "source_query" %>
-  <section hidden><button type="button">Save preferences</button></section>
+  <section hidden><button type="button">Save preferences</button><button type="button">Discard draft</button></section>
   <%= form.submit "Save preferences" %>
   <%= form.button "Archive", type: "button", disabled: true %>
 <% end %>

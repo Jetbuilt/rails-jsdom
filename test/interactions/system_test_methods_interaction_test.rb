@@ -88,6 +88,14 @@ class SystemTestMethodsInteractionTest < RailsJsdom::TestCase
     assert_current_path "/echo?sort=Newest"
   end
 
+  test "fill_in finds the field a label names even when a hidden input shares its id" do
+    visit forms_path
+    fill_in "Budget", with: "250"
+    click_on "Save preferences"
+
+    assert_equal [ "250", "0" ], submitted.values_at("budget", "budget_mirror")
+  end
+
   test "click_link finds only links" do
     visit forms_path
 

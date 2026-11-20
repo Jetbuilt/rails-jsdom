@@ -112,6 +112,14 @@ test("within picks the one visible match over hidden ones, and still scopes to a
   assert.equal((await query("css", "p", [{ css: "#closed" }])).length, 1)
 })
 
+test("a label's for names every field with that id, skipping a hidden input that shares it", async () => {
+  await runner.load(`<label for="cost">Cost</label><input type="hidden" id="cost" name="mirror"><input id="cost" name="cost"><label>Nested <input name="nested"></label>`)
+  await act("fill_in", "Cost", { with: "100" })
+  await act("fill_in", "Nested", { with: "inside" })
+
+  assert.deepEqual(await runner.evaluate(`[document.querySelector("[name=cost]").value, document.querySelector("[name=mirror]").value, document.querySelector("[name=nested]").value]`), ["100", "", "inside"])
+})
+
 test("click fails on a disabled element", async () => {
   await runner.load(`<button disabled>Off</button>`)
 

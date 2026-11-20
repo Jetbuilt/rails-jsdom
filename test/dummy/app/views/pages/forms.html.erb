@@ -25,6 +25,9 @@
   <%= form.text_field :nickname, value: "Ace" %>
   <%= form.label :locked, "Locked" %>
   <%= form.text_field :locked, value: "fixed", disabled: true %>
+  <%= form.label :budget, "Budget" %>
+  <%= form.hidden_field :budget, value: "0", name: "budget_mirror" %>
+  <%= form.text_field :budget %>
   <%= form.label :bio, "Bio" %>
   <%= form.text_area :bio %>
   <%= form.text_field :query, disabled: true, placeholder: "Search orders" %>

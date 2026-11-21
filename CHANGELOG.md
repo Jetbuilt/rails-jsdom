@@ -19,6 +19,7 @@
 
 ### Fixed
 
+- Opening a cable connection closes the response body of the request it makes to the app, so the Rails executor completes. It was left running on the test's thread until the next request, so a test that followed without making one ran inside it: jobs a commit enqueued were held back, and `Current` kept the earlier test's values.
 - A `<dialog>`'s `returnValue` starts as `""` and holds the value it was closed with as a string, as in browsers. jsdom left it undefined, so code that checks for an empty return value to tell a dismissal from a choice saw a choice.
 - The page's visible text includes elements a script appends to the root element after `<body>`, which browsers render, such as a fragment Turbo appends when it renders a stream message. Only `<body>` was read before. `<head>` is still left out.
 - Escape cancels the topmost modal `<dialog>`, including one inside a shadow root such as a Web Awesome dialog's: it fires a cancelable `cancel` event and closes the dialog unless that event is prevented, as browsers do. jsdom has no close watcher, so Escape left modals open.
